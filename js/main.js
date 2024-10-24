@@ -3,9 +3,49 @@ const config = {
     welcome: "Bienvenue sur mon CV interactif ! Tape 'help' pour voir les commandes disponibles.",
     invalid_command: "Commande non trouvée : ",
     files: {
-        "about.txt": "Ce CV est une simulation de terminal en JavaScript.",
-        "contact.txt": "e.clement1002@gmail.com +33 7 57 87 14 44",
-        "interests.txt": ""
+        "about.txt": `Elodie CLEMENT, Développeuse Full Stack à la recherche d'une alternance en développement pour l'année 2024/2025.\n
+Actuellement étudiante à l'ESGI, j'ai une base solide en informatique,\n
+avec une expérience dans le développement front-end et back-end.`,
+
+        "education.txt": `Éducation :\n
+2024 - Présent : ESGI - Cycle Mastère en cours.\n
+  Socle solide en informatique, avec un focus sur les aspects théoriques et pratiques du développement logiciel.\n\n
+2020 - 2023 : Plovdiv Medical University.\n
+  Études de médecine pendant 3 ans avant de me réorienter vers l'informatique.\n\n
+2020 : Lycée Jacques Monod.\n
+  Obtention du bac scientifique, spécialité Physique.`,
+
+        "experience.txt": `Expérience professionnelle :\n\n
+2024 - Stage My Water Technologies.\n
+  Développement de nouvelles fonctionnalités et résolution de bugs pour le dashboard administrateur.\n
+  Technologies utilisées : React, JavaScript.\n\n
+2024 - Projet annuel.\n
+  Réalisation d'un site web dynamique en équipe, intégration d'une base de données relationnelle et gestion d'un back-office.\n
+  https://www.coscmicgames.online\n\n
+2020 - Stage Le Plessis Informatique.\n
+  Réparation de matériels informatiques, installation de NAS, systèmes opérateurs, et logiciels.`,
+
+        "skills.txt": `Compétences techniques :\n
+- HTML5, CSS3\n
+- JavaScript, SQL\n
+- C, Figma\n
+- Git\n\n
+En cours d'apprentissage :\n
+- TypeScript et Frameworks (React, Angular ou Vue)\n
+- NoSQL et applications mobiles Android\n
+- Algorithmique avancée`,
+
+        "languages.txt": `Langues :\n
+- Français (C2 - Bilingue)\n
+- Anglais (C1 - Avancé)\n
+- Bulgare (B2 - Intermédiaire)\n
+- Allemand (A2 - Débutant)`,
+
+        "contact.txt": `Contacts :\n
+- Email : e.clement1002@gmail.com\n
+- Téléphone : +33 7 57 87 14 44\n
+- Permis B (en cours)\n
+- LinkedIn : www.linkedin.com/in/eli-clement`
     }
 };
 
@@ -47,7 +87,11 @@ Terminal.prototype.execCommand = function(cmd) {
             this.output.innerHTML += Object.keys(config.files).join("<br/>");
             break;
         case "cat":
-            this.output.innerHTML += config.files[args[0]] || config.invalid_command + args[0];
+            if (config.files[args[0]]) {
+                this.output.innerHTML += config.files[args[0]].replace(/\n/g, "<br/>");
+            } else {
+                this.output.innerHTML += config.invalid_command + args[0];
+            }
             break;
         case "whoami":
             this.output.innerHTML += "guest";
