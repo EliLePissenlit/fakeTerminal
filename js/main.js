@@ -15,9 +15,9 @@ function Terminal(prompt, cmdLine, output) {
     this.output = output;
     this.completePrompt = "guest@cv:~$ ";
 }
-
 Terminal.prototype.init = function() {
-    this.output.textContent = config.welcome;
+    this.prompt.textContent = this.completePrompt;  
+    this.output.innerHTML = config.welcome + "<br/>"; 
     this.cmdLine.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             this.handleCmd();
@@ -25,14 +25,18 @@ Terminal.prototype.init = function() {
     });
 };
 
+
+
 Terminal.prototype.handleCmd = function() {
     const command = this.cmdLine.value.trim(); 
-    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;
+    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;  // Affiche le prompt et la commande entrée
     this.cmdLine.value = ""; 
     this.execCommand(command); 
-    this.output.innerHTML += `<br/><span class="prompt-color">${this.completePrompt}</span> `;
+    this.output.innerHTML += "<br/>";  
     this.output.scrollTop = this.output.scrollHeight; 
 };
+
+
 
 
 
