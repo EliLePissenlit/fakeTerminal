@@ -56,6 +56,8 @@ function Terminal(prompt, cmdLine, output) {
     this.cmdLine = cmdLine;
     this.output = output;
     this.completePrompt = "guest@cv:~$ ";
+    this.commandHistory = [];
+    this.historyIndex = -1;
 }
 Terminal.prototype.init = function() {
     this.prompt.textContent = this.completePrompt;
@@ -64,17 +66,47 @@ Terminal.prototype.init = function() {
         if (event.key === "Enter") {
             this.handleCmd();
         } else if (event.key === "Tab") {
-            event.preventDefault(); 
-            this.autoComplete(); 
+            event.preventDefault();
+            this.autoComplete();
+        } else if (event.key === "ArrowUp") { 
+            event.preventDefault();
+            this.showPreviousCommand();
+        } else if (event.key === "ArrowDown") { 
+            event.preventDefault();
+            this.showNextCommand();
         }
     });
+};
+
+Terminal.prototype.showPreviousCommand = function() {
+    if (this.historyIndex > 0) { 
+        this.historyIndex--;
+        this.cmdLine.value = this.commandHistory[this.historyIndex];
+    }
+};
+
+Terminal.prototype.showNextCommand = function() {
+    if (this.historyIndex < this.commandHistory.length - 1) { 
+        this.historyIndex++;
+        this.cmdLine.value = this.commandHistory[this.historyIndex];
+    } else { 
+        this.historyIndex = this.commandHistory.length;
+        this.cmdLine.value = "";
+    }
 };
 
 
 
 Terminal.prototype.handleCmd = function() {
     const command = this.cmdLine.value.trim(); 
-    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;  
+    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;
+    
+    if (command) { 
+        this.commandHistory.push(command); 
+        this.historyIndex = this.commandHistory.length; 
+    }  
+
+
     this.cmdLine.value = ""; 
     this.execCommand(command); 
     this.output.innerHTML += "<br/>";  
