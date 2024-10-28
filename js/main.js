@@ -48,6 +48,8 @@ En cours d'apprentissage :\n
 - LinkedIn : www.linkedin.com/in/eli-clement`
     }
 };
+const sidenavBtn = document.getElementById('sidenavBtn');
+const sidenav = document.getElementById('sidenav');
 
 function Terminal(prompt, cmdLine, output) {
     this.prompt = prompt;
@@ -62,7 +64,7 @@ Terminal.prototype.init = function() {
         if (event.key === "Enter") {
             this.handleCmd();
         } else if (event.key === "Tab") {
-            event.preventDefault(); // Empêche le comportement par défaut du `Tab`
+            event.preventDefault(); 
             this.autoComplete(); 
         }
     });
@@ -72,7 +74,7 @@ Terminal.prototype.init = function() {
 
 Terminal.prototype.handleCmd = function() {
     const command = this.cmdLine.value.trim(); 
-    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;  // Affiche le prompt et la commande entrée
+    this.output.innerHTML += `<span class="prompt-color">${this.completePrompt}</span> ${command}<br/>`;  
     this.cmdLine.value = ""; 
     this.execCommand(command); 
     this.output.innerHTML += "<br/>";  
@@ -151,3 +153,7 @@ Terminal.prototype.autoComplete = function() {
         this.output.scrollTop = this.output.scrollHeight;
     }
 };
+
+sidenavBtn.addEventListener('click', () => {
+    sidenav.classList.toggle('open'); 
+});
