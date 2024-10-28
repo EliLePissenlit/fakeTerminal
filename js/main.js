@@ -1,9 +1,9 @@
 const config = {
-    help: "Commandes disponibles : ls, cat, whoami, date, clear, help",
+    help: "Commandes disponibles : ls, cat, whoami, date, clear, help, linkedin",
     welcome: "Bienvenue sur mon CV interactif ! Tape 'help' pour voir les commandes disponibles.",
     invalid_command: "Commande non trouvée : ",
     files: {
-        "about.txt": `Elodie CLEMENT, Développeuse Full Stack à la recherche d'une alternance en développement pour l'année 2024/2025.\n
+        "about.txt": `Elodie CLEMENT, Développeuse à la recherche d'une alternance en développement pour l'année 2024/2025.\n
 Actuellement étudiante à l'ESGI, j'ai une base solide en informatique,\n
 avec une expérience dans le développement front-end et back-end.`,
 
@@ -142,6 +142,9 @@ Terminal.prototype.execCommand = function(cmd) {
         case "help":
             this.output.innerHTML += config.help;
             break;
+            case "linkedin":
+                window.open("https://www.linkedin.com/in/eli-clement", "_blank");
+                break;
         default:
             this.output.innerHTML += config.invalid_command + cmd;
     }
@@ -166,7 +169,7 @@ Terminal.prototype.autoComplete = function() {
 
   
     if (args.length === 0) {
-        const commands = ["ls", "cat", "whoami", "date", "clear", "help"];
+        const commands = ["ls", "cat", "whoami", "date", "clear", "help", "linkedin" ];
         suggestions = commands.filter(cmd => cmd.startsWith(command));
     } else if (command === "cat" && args.length === 1) {
         const partialFileName = args[0];
