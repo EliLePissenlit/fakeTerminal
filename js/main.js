@@ -56,11 +56,14 @@ function Terminal(prompt, cmdLine, output) {
     this.completePrompt = "guest@cv:~$ ";
 }
 Terminal.prototype.init = function() {
-    this.prompt.textContent = this.completePrompt;  
-    this.output.innerHTML = config.welcome + "<br/>"; 
+    this.prompt.textContent = this.completePrompt;
+    this.output.innerHTML = config.welcome + "<br/>";
     this.cmdLine.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             this.handleCmd();
+        } else if (event.key === "Tab") {
+            event.preventDefault(); // Empêche le comportement par défaut du `Tab`
+            this.autoComplete(); 
         }
     });
 };
@@ -117,4 +120,34 @@ window.onload = function() {
         document.getElementById("cmdline"),
         document.getElementById("output")
     ).init();
+};
+
+Terminal.prototype.autoComplete = function() {
+    const input = this.cmdLine.value.trim(); 
+    const splitInput = input.split(" "); 
+    const command = splitInput[0]; 
+    const args = splitInput.slice(1); 
+
+    let suggestions = [];
+
+  
+    if (args.length === 0) {
+        const commands = ["ls", "cat", "whoami", "date", "clear", "help"];
+        suggestions = commands.filter(cmd => cmd.startsWith(command));
+    } else if (command === "cat" && args.length === 1) {
+        const partialFileName = args[0];
+        const files = Object.keys(config.files);
+        suggestions = files.filter(file => file.startsWith(partialFileName));
+    }
+
+    if (suggestions.length === 1) {
+        if (args.length === 0) {
+            this.cmdLine.value = suggestions[0];
+        } else {
+            this.cmdLine.value = `${command} ${suggestions[0]}`;
+        }
+    } else if (suggestions.length > 1) {
+        this.output.innerHTML += `<br/><span class="prompt-color">${this.completePrompt}</span> Suggestions : ${suggestions.join(", ")}<br/>`;
+        this.output.scrollTop = this.output.scrollHeight;
+    }
 };
