@@ -1,10 +1,10 @@
 const config = {
-    help: "Commandes disponibles : ls, cat, whoami, date, clear, help, linkedin",
+    help: "Commandes disponibles : ls, cat, whoami, date, clear, help, linkedin, cv, contact",
     welcome: "Bienvenue sur mon CV interactif ! Tape 'help' pour voir les commandes disponibles.",
     invalid_command: "Commande non trouvée : ",
     files: {
         "about.txt": `Elodie CLEMENT, Développeuse à la recherche d'une alternance en développement pour l'année 2024/2025.\n
-Actuellement étudiante à l'ESGI, j'ai une base solide en informatique,\n
+Actuellement étudiante à l'ESGI, j'ai une base solide en informatique,
 avec une expérience dans le développement front-end et back-end.`,
 
         "education.txt": `Éducation :\n
@@ -142,8 +142,24 @@ Terminal.prototype.execCommand = function(cmd) {
         case "help":
             this.output.innerHTML += config.help;
             break;
-            case "linkedin":
-                window.open("https://www.linkedin.com/in/eli-clement", "_blank");
+        case "linkedin":
+            window.open("https://www.linkedin.com/in/eli-clement", "_blank");
+            break;
+        case "cv":
+            const cvLink = document.createElement("a");
+            cvLink.href = "./assets/ClementElodieCV.pdf"; 
+            cvLink.download = "cv-elodie-clement.pdf";
+            cvLink.click();
+            this.output.innerHTML += "Téléchargement du CV lancé.";
+            break;
+            case "contact":
+                const contactFormContainer = document.getElementById("contactFormContainer");
+                if (contactFormContainer) {
+                    contactFormContainer.classList.remove("hidden");
+                    this.output.innerHTML += "Le formulaire de contact a été ouvert.";
+                } else {
+                    this.output.innerHTML += "Erreur : le formulaire de contact n'a pas pu être ouvert.";
+                }
                 break;
         default:
             this.output.innerHTML += config.invalid_command + cmd;
@@ -169,7 +185,7 @@ Terminal.prototype.autoComplete = function() {
 
   
     if (args.length === 0) {
-        const commands = ["ls", "cat", "whoami", "date", "clear", "help", "linkedin" ];
+        const commands = ["ls", "cat", "whoami", "date", "clear", "help", "linkedin", "cv", "contact"];
         suggestions = commands.filter(cmd => cmd.startsWith(command));
     } else if (command === "cat" && args.length === 1) {
         const partialFileName = args[0];
@@ -191,4 +207,35 @@ Terminal.prototype.autoComplete = function() {
 
 sidenavBtn.addEventListener('click', () => {
     sidenav.classList.toggle('open'); 
+});
+
+/*form*/
+document.getElementById('contactBtn').addEventListener('click', () => {
+    document.getElementById('contactFormContainer').classList.remove('hidden');
+});
+
+document.getElementById('closeForm').addEventListener('click', () => {
+    document.getElementById('contactFormContainer').classList.add('hidden');
+});
+
+document.getElementById('contactForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    emailjs.send("service_a1akkxs","template_c9vo4yk", {
+        from_name: name,      
+        reply_to: email,      
+        message: message      
+    })
+    .then(() => {
+        alert("Votre message a été envoyé !");
+        document.getElementById('contactFormContainer').classList.add('hidden');
+    })
+    .catch((error) => {
+        alert("Erreur lors de l'envoi de votre message.");
+        console.error("Erreur EmailJS :", error); 
+    });
 });

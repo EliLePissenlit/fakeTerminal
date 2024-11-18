@@ -3,10 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cv en ligne</title>
+    <title>CV intéractif de CLEMENT Elodie </title>
     <link rel="icon" href="./img/favicon.png" type="image/x-icon" />
     <link href="./css/main.css" rel="stylesheet" type="text/css" />
-    <script src="./js/main.js" defer></script> </head>
+    <script src="./js/main.js" defer></script> 
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            emailjs.init({
+              publicKey: "7tmLHIVMsJC5CTG4y",
+            });
+        })();
+    </script>
+</head>
     <script>
         window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
       </script>
@@ -15,13 +24,29 @@
 <body>
     <div id="sidenav">
         <button id="sidenavBtn">&#9776;</button>
-        <a href="./assets/CV_CLEMENT_DEVELOPPEUSE.pdf" download="cv_Elodie_Clement" id="downloadCv" class="sidenav-link">Télécharger le CV</a>
+        <a href="./assets/ClementElodieCV.pdf" download="cv_Elodie_Clement" id="downloadCv" class="sidenav-link">Télécharger le CV</a>
         <a href="https://coscmicgames.online/" id="PA2024" class="sidenav-link">Projet annuel 2024</a>
         <a href="https://www.linkedin.com/in/eli-clement/" id="linkedin" class="sidenav-link">Mon profil linkedin</a>
+        <button id="contactBtn" class="sidenav-link">Contactez-moi</button> 
+
 
 
 
     </div>
+
+<div id="contactFormContainer" class="contact-form hidden">
+    <form id="contactForm">
+        <h2>Contactez-moi</h2>
+        <label for="name">Nom :</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required>
+        <label for="message">Message :</label>
+        <textarea id="message" name="message" required></textarea>
+        <button type="submit">Envoyer</button>
+        <button type="button" id="closeForm">Fermer</button>
+    </form>
+</div>
 
 
 
