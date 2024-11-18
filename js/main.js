@@ -1,5 +1,5 @@
 const config = {
-    help: "Commandes disponibles : ls, cat, whoami, date, clear, help, linkedin, cv, contact",
+    help: "Commandes disponibles : ls, cat, whoami, date, clear, help, linkedin, cv, contact, compteur, ascii",
     welcome: "Bienvenue sur mon CV interactif ! Tape 'help' pour voir les commandes disponibles.",
     invalid_command: "Commande non trouvée : ",
     files: {
@@ -58,6 +58,7 @@ function Terminal(prompt, cmdLine, output) {
     this.completePrompt = "guest@cv:~$ ";
     this.commandHistory = [];
     this.historyIndex = -1;
+    this.commandCounter = 0;
 }
 Terminal.prototype.init = function() {
     this.prompt.textContent = this.completePrompt;
@@ -122,28 +123,35 @@ Terminal.prototype.execCommand = function(cmd) {
     switch (command) {
         case "ls":
             this.output.innerHTML += Object.keys(config.files).join("<br/>");
+            this.commandCounter++;
             break;
         case "cat":
             if (config.files[args[0]]) {
                 this.output.innerHTML += config.files[args[0]].replace(/\n/g, "<br/>");
+                this.commandCounter++;
             } else {
                 this.output.innerHTML += config.invalid_command + args[0];
             }
             break;
         case "whoami":
             this.output.innerHTML += "guest";
+            this.commandCounter++;
             break;
         case "date":
             this.output.innerHTML += new Date().toString();
+            this.commandCounter++;
             break;
         case "clear":
             this.output.innerHTML = "";
+            this.commandCounter++;
             break;
         case "help":
             this.output.innerHTML += config.help;
+            this.commandCounter++;
             break;
         case "linkedin":
             window.open("https://www.linkedin.com/in/eli-clement", "_blank");
+            this.commandCounter++;
             break;
         case "cv":
             const cvLink = document.createElement("a");
@@ -157,12 +165,37 @@ Terminal.prototype.execCommand = function(cmd) {
                 if (contactFormContainer) {
                     contactFormContainer.classList.remove("hidden");
                     this.output.innerHTML += "Le formulaire de contact a été ouvert.";
+                    this.commandCounter++;
                 } else {
                     this.output.innerHTML += "Erreur : le formulaire de contact n'a pas pu être ouvert.";
                 }
                 break;
+            case "compteur":
+                this.commandCounter++;
+                this.output.innerHTML += `Nombre de commandes exécutées : ${this.commandCounter}`;
+                break;
+                case "ascii":
+                    this.output.innerHTML += `<pre>
+                 ######   ######   #######  ##   ##  #######  #######          ##   ##   #####    ####             #######  ##   ##             ##     ####     ######   #######  ######   ##   ##    ##     ##   ##    ####   #######            #####   ##   ##  ######
+                 ##  ##   ##  ##   ##   #  ###  ##   ##   #  #   ##            ### ###  ##   ##    ##               ##   #  ###  ##            ####     ##      # ## #    ##   #   ##  ##  ###  ##   ####    ###  ##   ##  ##   ##   #           ##   ##  ##   ##   ##  ##
+                 ##  ##   ##  ##   ## #    #### ##   ## #       ##             #######  ##   ##    ##               ## #    #### ##           ##  ##    ##        ##      ## #     ##  ##  #### ##  ##  ##   #### ##  ##        ## #             #         ## ##    ##  ##
+                 #####    #####    ####    ## ####   ####      ##              #######  ##   ##    ##               ####    ## ####           ##  ##    ##        ##      ####     #####   ## ####  ##  ##   ## ####  ##        ####              #####    ## ##    #####
+                 ##       ## ##    ## #    ##  ###   ## #     ##               ## # ##  ##   ##    ##               ## #    ##  ###           ######    ##   #    ##      ## #     ## ##   ##  ###  ######   ##  ###  ##        ## #                  ##    ###     ##
+                 ##       ##  ##   ##   #  ##   ##   ##   #  ##    #           ##   ##  ##   ##    ##               ##   #  ##   ##           ##  ##    ##  ##    ##      ##   #   ##  ##  ##   ##  ##  ##   ##   ##   ##  ##   ##   #           ##   ##    ###     ##
+                 ##       ###  ##  ####### ##   ##  #######  #######           ##   ##   #####    ####             #######  ##   ##           ##  ##   #######   ####    #######  #### ##  ##   ##  ##  ##   ##   ##    ####   #######            #####      #     ####
+                    </pre>`;
+                    this.commandCounter++;
+                    break;
+                
         default:
             this.output.innerHTML += config.invalid_command + cmd;
+    }
+
+
+
+const counterDisplay = document.getElementById("commandCounterDisplay");
+    if (counterDisplay) {
+        counterDisplay.textContent = `Commandes exécutées : ${this.commandCounter}`;
     }
 };
 
@@ -185,7 +218,7 @@ Terminal.prototype.autoComplete = function() {
 
   
     if (args.length === 0) {
-        const commands = ["ls", "cat", "whoami", "date", "clear", "help", "linkedin", "cv", "contact"];
+        const commands = ["ls", "cat", "whoami", "date", "clear", "help", "linkedin", "cv", "contact", "compteur", "ascii"];
         suggestions = commands.filter(cmd => cmd.startsWith(command));
     } else if (command === "cat" && args.length === 1) {
         const partialFileName = args[0];
